@@ -39,6 +39,8 @@ jobs:
 
             - name: setup-kosli-cli
               uses: kosli-dev/setup-cli-action@v2
+              with:
+                version: 'v2.11.21'
             - name: Begin trail
               run: kosli begin trail ${{ github.sha }} --description "build number ${BUILD_NUMBER}"
             - name: Download container image
