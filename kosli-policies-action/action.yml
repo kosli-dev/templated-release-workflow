@@ -1,0 +1,25 @@
+name: Kosli policy action
+description: 
+
+author: Kosli Dev Team
+
+# Define your inputs here.
+inputs:
+  build_id:
+    description: The ID of the build to check.
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    
+    - name: Set GitHub Path
+      run: echo "$GITHUB_ACTION_PATH" >> $GITHUB_PATH
+      shell: bash
+      env:
+        GITHUB_ACTION_PATH: ${{ github.action_path }}
+    - run: tree
+      shell: bash
+    - name: create policy
+      run: kosli create policy prod-requirements $GITHUB_ACTION_PATH/prod-policy.yaml
+      shell: bash
