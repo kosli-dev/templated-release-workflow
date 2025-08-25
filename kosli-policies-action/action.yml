@@ -1,5 +1,5 @@
 name: Kosli policy action
-description: Create Kosli policies from YAML files
+description: Create Kosli policies from YAML files and attach them to environments
 
 author: Kosli Dev Team
 
@@ -7,6 +7,9 @@ author: Kosli Dev Team
 inputs:
   policy_files:
     description: 'Comma-separated list of policy file names without extension (e.g., "artifact-provenance,trail-compliance")'
+    required: true
+  environments:
+    description: 'Comma-separated list of environment names (e.g., "staging,production")'
     required: true
 
 runs:
@@ -19,9 +22,11 @@ runs:
       env:
         GITHUB_ACTION_PATH: ${{ github.action_path }}
     
-    - name: Create Kosli policies
+    - name: Create and attach Kosli policies
       run: |
         IFS=',' read -ra POLICY_NAMES <<< "${{ inputs.policy_files }}"
+        IFS=',' read -ra ENVIRONMENTS <<< "${{ inputs.environments }}"
+        
         for policy_name in "${POLICY_NAMES[@]}"; do
           # Trim whitespace
           policy_name=$(echo "$policy_name" | xargs)
@@ -31,6 +36,14 @@ runs:
           if [ -f "$GITHUB_ACTION_PATH/$policy_file" ]; then
             echo "Creating policy '$policy_name' from file '$policy_file'"
             kosli create policy "$policy_name" "$GITHUB_ACTION_PATH/$policy_file"
+            
+            # Attach policy to all specified environments
+            for environment in "${ENVIRONMENTS[@]}"; do
+              # Trim whitespace
+              environment=$(echo "$environment" | xargs)
+              echo "Attaching policy '$policy_name' to environment '$environment'"
+              kosli attach-policy "$policy_name" --environment "$environment"
+            done
           else
             echo "Warning: Policy file '$policy_file' not found in action directory"
             exit 1
