@@ -2,9 +2,8 @@ _schema: https://kosli.com/schemas/policy/environment/v1
 
 # https://docs.kosli.com/getting_started/policies/#specific-attestations
 
-artifacts:
-  attestations:
-    - name: 'test-report'
-      type: generic
-    - name: 'system-test-report'
-      type: generic
+attestations:
+  - name: 'test-report'
+    type: generic
+  - name: 'system-test-report'
+    type: generic
