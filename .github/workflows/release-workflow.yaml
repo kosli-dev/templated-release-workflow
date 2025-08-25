@@ -58,3 +58,8 @@ jobs:
               with:
                 json_file_path: trail.json
                 status_to_find: MISSING
+            
+            - name: Create Kosli Policies
+              uses: ./kosli-policies-action
+              with:
+                policy_files: "artifact-provenance,trail-compliance,all-test-cases-present"
