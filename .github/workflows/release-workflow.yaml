@@ -23,8 +23,8 @@ env:
   COMMIT_URL: ${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }}
   KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_KEY }} # Set the Kosli API token as a secret in your repository
   KOSLI_ORG: kosli-public
-  KOSLI_FLOW:  ${{ github.event.repository.name }}-release
-  KOSLI_ARTIFACT_FLOW:  ${{ github.event.repository.name }}
+  KOSLI_FLOW:  templated-workflow-release 
+  KOSLI_ARTIFACT_FLOW: templated-workflow
   KOSLI_TRAIL: ${{ github.sha }} # Use the full Git SHA for the trail
   
 jobs:
@@ -46,7 +46,8 @@ jobs:
 
             - name: Attest docker image
               run: kosli attest artifact --artifact-type=docker --commit-url=${{env.COMMIT_URL}} --commit=${{ github.sha }} ${{ inputs.docker-image }} --build-url=${{ env.BUILD_URL }} --name=container
-
+            - name: Attest system test
+              run: kosli attest generic --name system-test --attachments system-test.txt
             - name: Get trail from Kosli
               env:
                 IMAGE: ${{ inputs.docker-image }}

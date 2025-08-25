@@ -1,0 +1,7 @@
+_schema: https://kosli.com/schemas/policy/environment/v1
+
+# https://docs.kosli.com/getting_started/policies/#trail-compliance
+
+artifacts:
+  trail-compliance:
+    required: true
