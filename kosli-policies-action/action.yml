@@ -1,12 +1,12 @@
 name: Kosli policy action
-description: 
+description: Create Kosli policies from YAML files
 
 author: Kosli Dev Team
 
 # Define your inputs here.
 inputs:
-  build_id:
-    description: The ID of the build to check.
+  policy_files:
+    description: 'Comma-separated list of policy file names without extension (e.g., "artifact-provenance,trail-compliance")'
     required: true
 
 runs:
@@ -18,8 +18,22 @@ runs:
       shell: bash
       env:
         GITHUB_ACTION_PATH: ${{ github.action_path }}
-    - run: tree
-      shell: bash
-    - name: create policy
-      run: kosli create policy prod-requirements $GITHUB_ACTION_PATH/prod-policy.yaml
+    
+    - name: Create Kosli policies
+      run: |
+        IFS=',' read -ra POLICY_NAMES <<< "${{ inputs.policy_files }}"
+        for policy_name in "${POLICY_NAMES[@]}"; do
+          # Trim whitespace
+          policy_name=$(echo "$policy_name" | xargs)
+          # Construct the filename by appending .yaml
+          policy_file="${policy_name}.yaml"
+          
+          if [ -f "$GITHUB_ACTION_PATH/$policy_file" ]; then
+            echo "Creating policy '$policy_name' from file '$policy_file'"
+            kosli create policy "$policy_name" "$GITHUB_ACTION_PATH/$policy_file"
+          else
+            echo "Warning: Policy file '$policy_file' not found in action directory"
+            exit 1
+          fi
+        done
       shell: bash
