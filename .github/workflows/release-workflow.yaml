@@ -67,4 +67,4 @@ jobs:
                 policy_files: "artifact-provenance,trail-compliance,all-test-cases-present"
                 environments: "templated-release-workflow"
             - name: assert application to environment
-              run: kosli assert artifact --artifact-type=${{ inputs.docker-image }} --environment templated-release-workflow
+              run: kosli assert artifact --artifact-type=docker ${{ inputs.docker-image }} --environment templated-release-workflow
