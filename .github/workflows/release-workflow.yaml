@@ -46,8 +46,8 @@ jobs:
 
             - name: Attest docker image
               run: kosli attest artifact --artifact-type=docker --commit-url=${{env.COMMIT_URL}} --commit=${{ github.sha }} ${{ inputs.docker-image }} --build-url=${{ env.BUILD_URL }} --name=container
-            - name: Attest system test
-              run: kosli attest generic --name system-test --attachments system-test.txt
+            - name: Attest system test report
+              run: kosli attest generic --name system-test-report --attachments system-test.txt
             - name: Get trail from Kosli
               env:
                 IMAGE: ${{ inputs.docker-image }}
