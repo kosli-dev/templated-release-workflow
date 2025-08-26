@@ -5,5 +5,7 @@ _schema: https://kosli.com/schemas/policy/environment/v1
 attestations:
   - name: 'test-report'
     type: generic
+    if: ${{ flow.tags.kind == "ci-pipeline" }}
   - name: 'system-test-report'
     type: generic
+    if: ${{ flow.tags.kind == "release-pipeline" }}

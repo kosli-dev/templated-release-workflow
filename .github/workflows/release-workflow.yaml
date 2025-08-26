@@ -43,6 +43,8 @@ jobs:
                 version: '2.11.21'
             - name: Begin trail
               run: kosli begin trail ${{ github.sha }} --description "build number ${BUILD_NUMBER}"
+            - name: Tag kosli flow
+              run: kosli tag flow ${{ env.KOSLI_FLOW }} --set kind=release-pipeline
             - name: Download container image
               run: docker pull ${{ inputs.docker-image }}
 
