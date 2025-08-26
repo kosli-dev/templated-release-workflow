@@ -2,10 +2,11 @@ _schema: https://kosli.com/schemas/policy/environment/v1
 
 # https://docs.kosli.com/getting_started/policies/#specific-attestations
 
-attestations:
-  - name: 'test-report'
-    type: generic
-    if: ${{ flow.tags.kind == "ci-pipeline" }}
-  - name: 'system-test-report'
-    type: generic
-    if: ${{ flow.tags.kind == "release-pipeline" }}
+artifacts:
+  attestations:
+    - name: 'test-report'
+      type: generic
+      if: ${{ flow.tags.kind == "ci-pipeline" }}
+    - name: 'system-test-report'
+      type: generic
+      if: ${{ flow.tags.kind == "release-pipeline" }}
